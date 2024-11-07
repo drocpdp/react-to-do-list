@@ -1,18 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './components/header/header.component';
-import FilterPane from './components/filter-pane/filter-pane.component';
+import {Routes, Route } from 'react-router-dom';
+
+import MainPane from './components/main-pane/main-pane.component';
 import TasksPane from './components/tasks-pane/tasks-pane.component';
+import About from './routes/about/about.component';
 
 const App = () => {
   
   return (
-    <div>
-      <Header />
-      <FilterPane />
-      <TasksPane />
-
-    </div>
+    <Routes>
+      <Route path='/' element={<MainPane />} >
+        <Route index element={<TasksPane />} />
+        <Route path='about' element={<About />} />
+      </Route>
+    </Routes>
   );
 }
 
