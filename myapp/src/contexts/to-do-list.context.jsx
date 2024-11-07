@@ -3,50 +3,63 @@ import { useReducer } from "react"
 import { createContext } from "react"
 import { all_tasks } from "../data/tasks"
 
-const INITIAL_STATE = { all_tasks };
-
-export const TasksContext = createContext({});
+const INITIAL_STATE = {
+    tasks: [
+            {
+                id: 1,
+                text: "Learn React",
+                priority: 3,
+                completed: false,
+            },
+            {
+                id: 2,
+                text: "Finish this project",
+                priority: 3,
+                completed: false,
+            },
+            {
+                id: 3,
+                text: "Drink some coffee",
+                priority: 2,
+                completed: true,
+            },
+            {
+                id: 4,
+                text: "Learn about contexts and reducers",
+                priority: 3,
+                completed: true,
+            },
+            { 
+                id: 5,
+                text: "Learn about other things",
+                priority: 1,
+                completed: false,
+            }
+        ]
+    }
 
 const tasksReducer = (state, action) => {
-    const { type, payload } = action;
-
-    switch(type) {
-        case "ADD_TASK":
-            alert('ok')
+    switch (action.type) {
+        case "NONE":
             return {
-                ...state,
-                ...payload
-            };
-        case "TOGGLE_TASK":
-                alert('toggle')
-                return {
-                    ...state,
-                    ...payload
-                };
-        case "CHANGE_PRIORITY":
-            return {
-                ...state,
-                ...payload
-            };                
-        case "EDIT_TASK":
-            return {
-                ...state,
-                ...payload
-            };
+                ...state
+            }
         default:
-            throw new Error(`Unahandled type of ${type} in tasksReducer`);
+            return {
+                ...state
+            }
     }
 }
 
-export const TasksProvider = ({children}) => {
+export const TasksContext = createContext({});
 
-    const [
-        {},
-        dispatch
-    ] = useReducer(tasksReducer, INITIAL_STATE)
+
+export const TasksProvider = ({children}) => {
+    const [state, dispatch] = useReducer(tasksReducer, INITIAL_STATE);
 
     const value = {
-        dispatch,    
+        state,
+        dispatch
     };
     
     return <TasksContext.Provider value={value}>

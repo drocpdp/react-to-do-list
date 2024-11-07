@@ -15,7 +15,7 @@ export const all_tasks = [
         id: 3,
         text: "Drink some coffee",
         priority: 2,
-        completed: false,
+        completed: true,
     },
     {
         id: 4,
