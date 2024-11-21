@@ -1,7 +1,6 @@
 import react from "react"
 import { useReducer } from "react"
 import { createContext } from "react"
-import { all_tasks } from "../data/tasks"
 
 const INITIAL_STATE = {
     tasks: [
@@ -38,28 +37,56 @@ const INITIAL_STATE = {
         ]
     }
 
+const toggleCompleted = (state, action) => {
+    const taskID = action.payload.id;
+
+    // Create a new state copy with updated tasks
+    return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+            taskID === task.id
+                ? { ...task, completed: !task.completed } // Toggle `completed` for the matching task
+                : task // Return unchanged tasks
+        ),
+    };
+};
+
+const changePriority = (state, action) => {
+    const taskID = action.payload.id;
+    const newPriority = action.payload.newPriority;
+    
+    return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+            taskID === task.id
+                ? { ...task, priority: newPriority }
+                : task
+        ),
+    };
+};
+
+
 const tasksReducer = (state, action) => {
     switch (action.type) {
-        case "NONE":
-            return {
-                ...state
-            }
+        case 'TOGGLE_COMPLETED':
+            return toggleCompleted(state, action);
+        case 'CHANGE_PRIORITY':
+            return changePriority(state, action);
         default:
-            return {
-                ...state
-            }
+            return state;
     }
 }
+
 
 export const TasksContext = createContext({});
 
 
 export const TasksProvider = ({children}) => {
-    const [state, dispatch] = useReducer(tasksReducer, INITIAL_STATE);
+    const [tasksState, taskActionDispatch] = useReducer(tasksReducer, INITIAL_STATE);
 
     const value = {
-        state,
-        dispatch
+        tasksState,
+        taskActionDispatch
     };
     
     return <TasksContext.Provider value={value}>

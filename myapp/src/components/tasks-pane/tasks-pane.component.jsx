@@ -1,59 +1,59 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { TasksContext } from "../../contexts/to-do-list.context";
 
 
 const TasksPane = () => {
-
-    const {state, dispatch}  = useContext(TasksContext);
+    const { tasksState, taskActionDispatch } = useContext(TasksContext);
 
     return (
         <div>
             <div className="container">
                 <div className="header row justify-content-start">
-                    <div className="col-1">
-                        Complete
-                    </div>
-                    <div className="col-2">
-                        Priority
-                    </div>      
-                    <div className="col-4">
-                        Task
-                    </div>                                        
+                    <div className="col-1">Complete</div>
+                    <div className="col-2">Priority</div>
+                    <div className="col-4">Task</div>
                 </div>
 
-                {state.tasks.map((task) => (
-
+                {tasksState.tasks.map((task, index) => (
                     <div 
+                        key={task.id} 
                         className="row justify-content-start"
-                        key={task.id}
                     >
                         <div className="col-1">
-                            <input type="checkbox"
-                                defaultChecked={task.completed}
-                            >
-                            </input>
+                            <input 
+                                type="checkbox"
+                                checked={task.completed}
+                                onChange={() => {
+                                    taskActionDispatch({
+                                        type: 'TOGGLE_COMPLETED',
+                                        payload: { id: task.id }, // Pass the task id here
+                                    });
+                                }}
+                            />
                         </div>
                         <div className="col-2">
                             <select 
                                 name={task.priority}
                                 defaultValue={task.priority}
+                                onChange={ev => {
+                                    taskActionDispatch({
+                                        type: 'CHANGE_PRIORITY',
+                                        payload: {id: task.id, newPriority: ev.target.value },
+                                    });
+                                }}
                             >
                                 <option value="0">Priority</option>
                                 <option value="1">Low</option>
                                 <option value="2">Med</option>
                                 <option value="3">High</option>
                             </select>
-                        </div>      
-                        <div className="col-4">
-                            {task.text}
-                        </div>                                        
+                        </div>
+                        <div className="col-4">{task.text}</div>
                     </div>
                 ))}
-                
             </div>
         </div>
-    
-    )
-}
+    );
+};
 
 export default TasksPane;
