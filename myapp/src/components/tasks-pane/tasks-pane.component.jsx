@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TasksContext } from "../../contexts/to-do-list.context";
 
 
@@ -48,7 +48,19 @@ const TasksPane = () => {
                                 <option value="3">High</option>
                             </select>
                         </div>
-                        <div className="col-4">{task.text}</div>
+                        <div className="col-4">
+                            <input
+                                type="text"
+                                defaultValue={task.text}
+                                onChange={ev => {
+                                    taskActionDispatch({
+                                        type: 'EDIT_TASK_TEXT',
+                                        payload: {id: task.id, editedText: ev.target.value },
+                                    });
+                                }}
+                            >
+                            </input>
+                        </div>
                     </div>
                 ))}
             </div>

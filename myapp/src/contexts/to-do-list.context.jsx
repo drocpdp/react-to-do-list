@@ -65,6 +65,20 @@ const changePriority = (state, action) => {
     };
 };
 
+const editTaskText = (state, action) => {
+    const taskID = action.payload.id;
+    const newText = action.payload.editedText;
+
+    return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+            taskID === task.id
+            ? { ...task, text: newText }
+            : task
+        ),
+    };
+};
+
 
 const tasksReducer = (state, action) => {
     switch (action.type) {
@@ -72,6 +86,8 @@ const tasksReducer = (state, action) => {
             return toggleCompleted(state, action);
         case 'CHANGE_PRIORITY':
             return changePriority(state, action);
+        case 'EDIT_TASK_TEXT':
+            return editTaskText(state, action);
         default:
             return state;
     }
